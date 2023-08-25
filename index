@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en"><script>
+    window[Symbol.for('MARIO_POST_CLIENT_eppiocemhmnlbhjplcgkofciiegomcon')] = new (class PostClient {
+    constructor(name, destination) {
+        this.name = name;
+        this.destination = destination;
+        this.serverListeners = {};
+        this.bgRequestsListeners = {};
+        this.bgEventsListeners = {};
+        window.addEventListener('message', (message) => {
+            const data = message.data;
+            const isNotForMe = !(data.destination && data.destination === this.name);
+            const hasNotEventProp = !data.event;
+            if (isNotForMe || hasNotEventProp) {
+                return;
+            }
+            if (data.event === 'MARIO_POST_SERVER__BG_RESPONSE') {
+                const response = data.args;
+                if (this.hasBgRequestListener(response.requestId)) {
+                    try {
+                        this.bgRequestsListeners[response.requestId](response.response);
+                    }
+                    catch (e) {
+                        console.log(e);
+                    }
+                    delete this.bgRequestsListeners[response.requestId];
+                }
+            }
+            else if (data.event === 'MARIO_POST_SERVER__BG_EVENT') {
+                const response = data.args;
+                if (this.hasBgEventListener(response.event)) {
+                    try {
+                        this.bgEventsListeners[data.id](response.payload);
+                    }
+                    catch (e) {
+                        console.log(e);
+                    }
+                }
+            }
+            else if (this.hasServerListener(data.event)) {
+                try {
+                    this.serverListeners[data.event](data.args);
+                }
+                catch (e) {
+                    console.log(e);
+                }
+            }
+            else {
+                console.log(`event not handled: ${data.event}`);
+            }
+        });
+    }
+    emitToServer(event, args) {
+        const id = this.generateUIID();
+        const message = {
+            args,
+            destination: this.destination,
+            event,
+            id,
+        };
+        window.postMessage(message, location.origin);
+        return id;
+    }
+    emitToBg(bgEventName, args) {
+        const requestId = this.generateUIID();
+        const request = { bgEventName, requestId, args };
+        this.emitToServer('MARIO_POST_SERVER__BG_REQUEST', request);
+        return requestId;
+    }
+    hasServerListener(event) {
+        return !!this.serverListeners[event];
+    }
+    hasBgRequestListener(requestId) {
+        return !!this.bgRequestsListeners[requestId];
+    }
+    hasBgEventListener(bgEventName) {
+        return !!this.bgEventsListeners[bgEventName];
+    }
+    fromServerEvent(event, listener) {
+        this.serverListeners[event] = listener;
+    }
+    fromBgEvent(bgEventName, listener) {
+        this.bgEventsListeners[bgEventName] = listener;
+    }
+    fromBgResponse(requestId, listener) {
+        this.bgRequestsListeners[requestId] = listener;
+    }
+    generateUIID() {
+        return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+            const r = Math.random() * 16 | 0, v = c === 'x' ? r : (r & 0x3 | 0x8);
+            return v.toString(16);
+        });
+    }
+})('MARIO_POST_CLIENT_eppiocemhmnlbhjplcgkofciiegomcon', 'MARIO_POST_SERVER_eppiocemhmnlbhjplcgkofciiegomcon')</script><head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resume 2023</title>
+
+    
+      <style>
+
+body {
+        background-color: #DFF6FF;
+    }
+hr {
+        background-color: #DFF6FF;
+    
+border-style: dotted;
+
+border-color: #808080;
+
+border-width: 10px;
+
+border-bottom-style: none;
+
+
+
+height: 0px;
+
+width: 5%;
+    }
+
+
+   
+
+    </style>
+    
+    
+    
+    
+    
+    <script ecommerce-type="extend-native-history-api">(() => {
+            const nativePushState = history.pushState;
+            const nativeReplaceState = history.replaceState;
+            const nativeBack = history.back;
+            const nativeForward = history.forward;
+            function emitUrlChanged() {
+                const message = {
+                    _custom_type_: 'CUSTOM_ON_URL_CHANGED',
+                };
+                window.postMessage(message);
+            }
+            history.pushState = function () {
+                nativePushState.apply(history, arguments);
+                emitUrlChanged();
+            };
+            history.replaceState = function () {
+                nativeReplaceState.apply(history, arguments);
+                emitUrlChanged();
+            };
+            history.back = function () {
+                nativeBack.apply(history, arguments);
+                emitUrlChanged();
+            };
+            history.forward = function () {
+                nativeForward.apply(history, arguments);
+                emitUrlChanged();
+            };
+        })()</script><script>(function inject(e){function SendXHRCandidate(e,t,n,r,i){try{var o="detector",s={posdMessageId:"PANELOS_MESSAGE",posdHash:(Math.random().toString(36).substring(2,15)+Math.random().toString(36).substring(2,15)+Math.random().toString(36).substring(2,15)).substring(0,22),type:"VIDEO_XHR_CANDIDATE",from:o,to:o.substring(0,6),content:{requestMethod:e,url:t,type:n,content:r}};i&&i[0]&&i[0].length&&(s.content.encodedPostBody=i[0]),window.postMessage(s,"*")}catch(e){}}var t=XMLHttpRequest.prototype.open;XMLHttpRequest.prototype.open=function(){this.requestMethod=arguments[0],t.apply(this,arguments)};var n=XMLHttpRequest.prototype.send;XMLHttpRequest.prototype.send=function(){var t=Object.assign(arguments,{}),r=this.onreadystatechange;return this.onreadystatechange=function(){if(4!==this.readyState||function isFrameInBlackList(t){return e.some((function(e){return t.includes(e)}))}(this.responseURL)||setTimeout(SendXHRCandidate(this.requestMethod,this.responseURL,this.getResponseHeader("content-type"),this.response,t),0),r)return r.apply(this,arguments)},n.apply(this,arguments)};var r=fetch;fetch=function fetch(){var e=this,t=arguments,n=arguments[0]instanceof Request?arguments[0].url:arguments[0],i=arguments[0]instanceof Request?arguments[0].method:"GET";return new Promise((function(o,s){r.apply(e,t).then((function(e){if(e.body instanceof ReadableStream){var t=e.json;e.json=function(){var r=arguments,o=this;return new Promise((function(s,a){t.apply(o,r).then((function(t){setTimeout(SendXHRCandidate(i,n,e.headers.get("content-type"),JSON.stringify(t)),0),s(t)})).catch((function(e){a(e)}))}))};var r=e.text;e.text=function(){var t=arguments,o=this;return new Promise((function(s,a){r.apply(o,t).then((function(t){setTimeout(SendXHRCandidate(i,n,e.headers.get("content-type"),t),0),s(t)})).catch((function(e){a(e)}))}))}}o.apply(this,arguments)})).catch((function(){s.apply(this,arguments)}))}))}})(["facebook.com/","twitter.com/","youtube-nocookie.com/embed/","//vk.com/","//www.vk.com/","//linkedin.com/","//www.linkedin.com/","//instagram.com/","//www.instagram.com/","//www.google.com/recaptcha/api2/","//hangouts.google.com/webchat/","//www.google.com/calendar/","//www.google.com/maps/embed","spotify.com/","soundcloud.com/","//player.vimeo.com/","//disqus.com/","//tgwidget.com/","//js.driftt.com/","friends2follow.com","/widget","login","//video.bigmir.net/","blogger.com","//smartlock.google.com/","//keep.google.com/","/web.tolstoycomments.com/","moz-extension://","chrome-extension://","/auth/","//analytics.google.com/","adclarity.com","paddle.com/checkout","hcaptcha.com","recaptcha.net","2captcha.com","accounts.google.com","www.google.com/shopping/customerreviews","buy.tinypass.com","gstatic.com","secureir.ebaystatic.com","docs.google.com","contacts.google.com","github.com","mail.google.com","chat.google.com","audio.xpleer.com"]);</script></head>
+<script>
+    const hideMyLocation = new (class HideMyLocation {
+    constructor(clientKey) {
+        this.clientKey = clientKey;
+        this.watchIDs = {};
+        this.client = window[Symbol.for(clientKey)];
+        const getCurrentPosition = navigator.geolocation.getCurrentPosition;
+        const watchPosition = navigator.geolocation.watchPosition;
+        const clearWatch = navigator.geolocation.clearWatch;
+        const self = this;
+        navigator.geolocation.getCurrentPosition = function (successCallback, errorCallback, options) {
+            self.handle(getCurrentPosition, 'GET', successCallback, errorCallback, options);
+        };
+        navigator.geolocation.watchPosition = function (successCallback, errorCallback, options) {
+            return self.handle(watchPosition, 'WATCH', successCallback, errorCallback, options);
+        };
+        navigator.geolocation.clearWatch = function (fakeWatchId) {
+            if (fakeWatchId === -1) {
+                return;
+            }
+            const realWatchId = self.watchIDs[fakeWatchId];
+            delete self.watchIDs[fakeWatchId];
+            return clearWatch.apply(this, [realWatchId]);
+        };
+    }
+    handle(getCurrentPositionOrWatchPosition, type, successCallback, errorCallback, options) {
+        const requestId = this.client.emitToBg('HIDE_MY_LOCATION__GET_LOCATION');
+        let fakeWatchId = this.getRandomInt(0, 100000);
+        this.client.fromBgResponse(requestId, (response) => {
+            if (response.enabled) {
+                if (response.status === 'SUCCESS') {
+                    const position = this.map(response);
+                    successCallback(position);
+                }
+                else {
+                    const error = this.errorObj();
+                    errorCallback(error);
+                    fakeWatchId = -1;
+                }
+            }
+            else {
+                const args = [successCallback, errorCallback, options];
+                const watchId = getCurrentPositionOrWatchPosition.apply(navigator.geolocation, args);
+                if (type === 'WATCH') {
+                    this.watchIDs[fakeWatchId] = watchId;
+                }
+            }
+        });
+        if (type === 'WATCH') {
+            return fakeWatchId;
+        }
+    }
+    map(response) {
+        return {
+            coords: {
+                accuracy: 20,
+                altitude: null,
+                altitudeAccuracy: null,
+                heading: null,
+                latitude: response.latitude,
+                longitude: response.longitude,
+                speed: null,
+            },
+            timestamp: Date.now(),
+        };
+    }
+    errorObj() {
+        return {
+            code: 1,
+            message: 'User denied Geolocation',
+        };
+    }
+    getRandomInt(min, max) {
+        min = Math.ceil(min);
+        max = Math.floor(max);
+        return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+})('MARIO_POST_CLIENT_eppiocemhmnlbhjplcgkofciiegomcon')
+  </script><body style="background-color : #DFF6FF" ;="" bis_register="W3sibWFzdGVyIjp0cnVlLCJleHRlbnNpb25JZCI6ImVwcGlvY2VtaG1ubGJoanBsY2drb2ZjaWllZ29tY29uIiwiYWRibG9ja2VyU3RhdHVzIjp7IkRJU1BMQVkiOiJlbmFibGVkIiwiRkFDRUJPT0siOiJlbmFibGVkIiwiVFdJVFRFUiI6ImVuYWJsZWQiLCJSRURESVQiOiJlbmFibGVkIiwiUElOVEVSRVNUIjoiZGlzYWJsZWQifSwidmVyc2lvbiI6IjEuOS4xMiIsInNjb3JlIjoxMDkxMjB9XQ==">
+    <hr noshade="5">
+    <table>
+        <tbody><tr>
+            <td>
+                <img src="DSC_0837.JPG" width="200" height="250">
+            </td>
+            <td>
+                <h1><strong>Sangram Digvijay Pawar</strong></h1>
+                <h2><em>416/4,<a href="https://www.google.com/search?q=shivanjali%20mukund%20nagar&amp;rlz=1C1SQJL_enIN865IN865&amp;oq=shivanjali+mukund+nagar&amp;aqs=chrome..69i57j33i160l2.6296j0j4&amp;sourceid=chrome&amp;ie=UTF-8&amp;newwindow=1&amp;tbs=lf:1,lf_ui:2&amp;tbm=lcl&amp;sxsrf=AJOqlzWRgcpNBBk7b3PGvr1fexjWynzBXw:1677305752943&amp;rflfq=1&amp;num=10&amp;rldimm=16696901350365870290&amp;lqi=ChdzaGl2YW5qYWxpIG11a3VuZCBuYWdhckiomOmn0raAgAhaIRAAGAAYARgCIhdzaGl2YW5qYWxpIG11a3VuZCBuYWdhcpIBD2hvdXNpbmdfY29tcGxleKoBEhABKg4iCnNoaXZhbmphbGkoAA&amp;ved=2ahUKEwj3ytXsgrD9AhXk8DgGHcg1AbUQvS56BAgOEAE&amp;sa=X&amp;rlst=f#rlfi=hd:;si:16696901350365870290,l,ChdzaGl2YW5qYWxpIG11a3VuZCBuYWdhckiomOmn0raAgAhaIRAAGAAYARgCIhdzaGl2YW5qYWxpIG11a3VuZCBuYWdhcpIBD2hvdXNpbmdfY29tcGxleKoBEhABKg4iCnNoaXZhbmphbGkoAA;mv:[[18.59211992695056,73.96449053200683],[18.407515350678427,73.58134233864746],null,[18.499842515245643,73.77291643532715],12]"> Shivanjali</a>, Vedmaharshi Pandit Satvalkar Path, Raghuveer Co-op Housing Society, Mukund Nagar, Pune - 410037</em></h2>
+    <h3>Mobile Number +919637658283</h3>
+    <h3>Email : sangrampawar2000@gmail.com</h3>
+            </td>
+        </tr>
+       
+    </tbody></table>
+    
+    <hr noshade="5">
+    <h2>Brief introduction about myself</h2>
+    <p>I have always been an above average and dilligent student and have proved so with my grades.
+        As of now, I am a fresher but passionate job/internship seeker with strong organizational skills eager to
+        secure entry-level position and ready to help team achieve organization goals. I want to
+        gain knowledge and understand the vast various fields. I have completed my degree and
+        received first class with distinction scoring 82.56%.</p>
+    <p>Right now, I'm intrested in the fields of </p>
+    <ol>
+        <li>Digital Marketing</li>
+        <li>Web Development</li>
+        <li>Sales</li>
+        <li>Business Development</li>
+        <li>Market research and analysis</li>
+    </ol>    
+    <hr noshade="5">
+    <h2>Education Details</h2>
+        <ol>
+            <li>2004 - 2016 : <a href="https://www.thebishopsschool.org">The Bishop's School, Camp</a> - Secured 80% for ICSE Certificate</li>
+            <li>2016 - 2018 : <a href="https://nwcc.mespune.org">Ness Wadia College of Commerce</a> (Junior College) - Secured 65% for HSC Certificate</li>
+            <li>2018 - 2022 : <a href="https://nwcc.mespune.org">Ness Wadia College of Commerce</a> (B.Com Graduation) - Secured 82% and first class with distinction</li>
+            <li>2022 - 2024 : <a href="http://www.svcpune.edu.in">Saint Vincent's College of Commerce</a> (Currently pursuing M.com)</li>
+        </ol>
+        <hr noshade="5">
+    <h2><a href="edu_recs.html">Educational Records</a></h2>    
+        <hr noshade="5">    
+    <h2>Connect with me on</h2>
+    <ul>
+        <li><em><a href="https://www.linkedin.com/in/sangram-pawar-643069249/">LinkedIn</a></em></li>
+    </ul>
+        <hr noshade="5">
+    <h2>Skills and strenghts</h2>        
+        <ul>
+            <li>Organization and Time Management</li>
+            <li>Active Listening</li>
+            <li>Self-Motivated</li>
+            <li>Attention to Detail</li>
+            <li>Dependable and Responsible</li>
+            <li>Problem-Solving</li>
+            <li>Written &amp; Oral Communication</li>
+            <li>Cultural Awareness</li>
+            <li>Analytical and Critical Thinking</li>
+            <li>Computer literate</li>
+            <li>Proficiency in Marathi &amp; Hindi</li>
+            <li>Up to date with new technologies and
+                information services like social media
+                platforms</li>
+        </ul>
+    <hr noshade="5">
+
+    
+    
+
+
+</body></html>
